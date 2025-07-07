@@ -7,7 +7,7 @@ variable "instance_type" {
 }
 
 variable "db_username" {
-  default = "admin"
+  default = "postgreuser"
 }
 
 variable "db_password" {
