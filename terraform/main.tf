@@ -61,7 +61,7 @@ resource "aws_instance" "web_server" {
 }
 
 resource "aws_db_instance" "postgres" {
-  identifier             = "${var.project_name}-db"
+  identifier = "${var.project_name}-db-${formatdate("YYYYMMDDhhmm", timestamp())}"
   engine                 = "postgres"
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
