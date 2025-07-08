@@ -14,7 +14,7 @@ data "aws_vpc" "default" {
 }
 
 resource "aws_security_group" "ec2_sg" {
-  name        = "${var.project_name}-ec2-sg"
+  name_prefix = "${var.project_name}-ec2-sg-"
   description = "Allow SSH and HTTP"
   vpc_id      = data.aws_vpc.default.id
 
@@ -49,6 +49,7 @@ resource "aws_security_group" "ec2_sg" {
     Name = "${var.project_name}-sg"
   }
 }
+
 
 resource "aws_instance" "web_server" {
   ami                    = data.aws_ami.ubuntu.id
