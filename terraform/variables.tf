@@ -15,5 +15,5 @@ variable "db_password" {
 }
 
 variable "allowed_ssh_cidr" {
-  default = "0.0.0.0/0"  # Para prueba, se puede restringir
+  default = "0.0.0.0/0" # Para prueba, se puede restringir
 }

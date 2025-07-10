@@ -13,6 +13,11 @@ data "aws_vpc" "default" {
   default = true
 }
 
+resource "aws_key_pair" "deployer" {
+  key_name   = "${var.project_name}-key"
+  public_key = file("aws_pipeline_key.pub")
+}
+
 resource "aws_security_group" "ec2_sg" {
   name_prefix = "${var.project_name}-ec2-sg-"
   description = "Allow SSH and HTTP"
@@ -50,23 +55,24 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
-
 resource "aws_instance" "web_server" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  key_name               = aws_key_pair.deployer.key_name
+
   tags = {
     Name = "${var.project_name}-ec2"
   }
 }
 
 resource "aws_db_instance" "postgres" {
-  identifier = "${var.project_name}-db-${formatdate("YYYYMMDDhhmm", timestamp())}"
-  engine                 = "postgres"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 20
-  username               = var.db_username
-  password               = var.db_password
-  skip_final_snapshot    = true
-  publicly_accessible    = true
+  identifier          = "${var.project_name}-db-${formatdate("YYYYMMDDhhmm", timestamp())}"
+  engine              = "postgres"
+  instance_class      = "db.t3.micro"
+  allocated_storage   = 20
+  username            = var.db_username
+  password            = var.db_password
+  skip_final_snapshot = true
+  publicly_accessible = true
 }
